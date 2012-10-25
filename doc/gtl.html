@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Module gtl</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module gtl</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+  The main module that contains all the API to the GTL.
+
+
+<h2><a name="description">Description</a></h2>
+  The main module that contains all the API to the GTL
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bump_ttl-0">bump_ttl/0</a></td><td>
+ When a process publishes an amq-message, it might immediately die
+  (before an amq-subscriber handle the message).</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#deregister_client-0">deregister_client/0</a></td><td>remove from worker any info about GTL.</td></tr>
+<tr><td valign="top"><a href="#erase_clerk_info-0">erase_clerk_info/0</a></td><td>erase info from worker about current logger.</td></tr>
+<tr><td valign="top"><a href="#get_clerk_info-0">get_clerk_info/0</a></td><td>get info from about current logger.</td></tr>
+<tr><td valign="top"><a href="#get_log-0">get_log/0</a></td><td>get log from current logger (if any).</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td></td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#is_process_alive-1">is_process_alive/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#log-1">log/1</a></td><td>Remember a particular term.</td></tr>
+<tr><td valign="top"><a href="#mark-0">mark/0</a></td><td>
+ By default, no transaction logs are ever recorded (logged).</td></tr>
+<tr><td valign="top"><a href="#mark-1">mark/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#mark_if_slow-2">mark_if_slow/2</a></td><td>mark transaction if a the call to function F takes too much time.</td></tr>
+<tr><td valign="top"><a href="#mark_if_slow-3">mark_if_slow/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#maybe_log-1">maybe_log/1</a></td><td>same as 'log', but executed only if a logger has already been started.</td></tr>
+<tr><td valign="top"><a href="#maybe_mark-0">maybe_mark/0</a></td><td>same as 'mark', but executed only if a logger has already been started.</td></tr>
+<tr><td valign="top"><a href="#maybe_mark-1">maybe_mark/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#quota_status-0">quota_status/0</a></td><td>Get the current status of quota server.</td></tr>
+<tr><td valign="top"><a href="#set_clerk_info-1">set_clerk_info/1</a></td><td>save info into the worker about logger.</td></tr>
+<tr><td valign="top"><a href="#set_parent_clerk_info-1">set_parent_clerk_info/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#set_ttl-1">set_ttl/1</a></td><td>
+ ask a gtl process to stay alive for a longer (shorter) period of time.</td></tr>
+<tr><td valign="top"><a href="#spawn-1">spawn/1</a></td><td>erlang:spawn replacer with GTL support.</td></tr>
+<tr><td valign="top"><a href="#spawn_opt-2">spawn_opt/2</a></td><td>erlang:spawn_opt replacer with GTL support.</td></tr>
+<tr><td valign="top"><a href="#status-0">status/0</a></td><td>status about current logger (if any).</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td></td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="bump_ttl-0">bump_ttl/0</a></h3>
+<div class="spec">
+<p><tt>bump_ttl() -&gt; any()</tt></p>
+</div><p>
+ When a process publishes an amq-message, it might immediately die
+  (before an amq-subscriber handle the message). Clerk for such a
+  process should wait until gtl clerk for the subscriber appears.
+ For the performance reason this delay for the local has been decreased
+  as we don't have large amount of data in our tests</p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><tt>code_change(OldVsn, State, Extra) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="deregister_client-0">deregister_client/0</a></h3>
+<div class="spec">
+<p><tt>deregister_client() -&gt; any()</tt></p>
+</div><p>remove from worker any info about GTL.
+ this is useful for gen_servers and other long-live processes</p>
+
+<h3 class="function"><a name="erase_clerk_info-0">erase_clerk_info/0</a></h3>
+<div class="spec">
+<p><tt>erase_clerk_info() -&gt; any()</tt></p>
+</div><p>erase info from worker about current logger</p>
+
+<h3 class="function"><a name="get_clerk_info-0">get_clerk_info/0</a></h3>
+<div class="spec">
+<p><tt>get_clerk_info() -&gt; any()</tt></p>
+</div><p>get info from about current logger</p>
+
+<h3 class="function"><a name="get_log-0">get_log/0</a></h3>
+<div class="spec">
+<p><tt>get_log() -&gt; any()</tt></p>
+</div><p>get log from current logger (if any)</p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><tt>handle_call(X1, X2, S) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><tt>handle_cast(X1, State) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><tt>handle_info(Msg, S) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><tt>init(X1) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="is_process_alive-1">is_process_alive/1</a></h3>
+<div class="spec">
+<p><tt>is_process_alive(Pid) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="log-1">log/1</a></h3>
+<div class="spec">
+<p><tt>log(Term) -&gt; any()</tt></p>
+</div><p>Remember a particular term.</p>
+
+<h3 class="function"><a name="mark-0">mark/0</a></h3>
+<div class="spec">
+<p><tt>mark() -&gt; any()</tt></p>
+</div><p>
+ By default, no transaction logs are ever recorded (logged).
+ The mark() function allows to mark a transaction as "interesting enough"
+ to be recorded when it finishes.</p>
+
+<h3 class="function"><a name="mark-1">mark/1</a></h3>
+<div class="spec">
+<p><tt>mark(Mark) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="mark_if_slow-2">mark_if_slow/2</a></h3>
+<div class="spec">
+<p><tt>mark_if_slow(Timeout, F) -&gt; any()</tt></p>
+</div><p>mark transaction if a the call to function F takes too much time</p>
+
+<h3 class="function"><a name="mark_if_slow-3">mark_if_slow/3</a></h3>
+<div class="spec">
+<p><tt>mark_if_slow(Timeout, F, Mark) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="maybe_log-1">maybe_log/1</a></h3>
+<div class="spec">
+<p><tt>maybe_log(Term) -&gt; any()</tt></p>
+</div><p>same as 'log', but executed only if a logger has already been started</p>
+
+<h3 class="function"><a name="maybe_mark-0">maybe_mark/0</a></h3>
+<div class="spec">
+<p><tt>maybe_mark() -&gt; any()</tt></p>
+</div><p>same as 'mark', but executed only if a logger has already been started</p>
+
+<h3 class="function"><a name="maybe_mark-1">maybe_mark/1</a></h3>
+<div class="spec">
+<p><tt>maybe_mark(Mark) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="quota_status-0">quota_status/0</a></h3>
+<div class="spec">
+<p><tt>quota_status() -&gt; any()</tt></p>
+</div><p>Get the current status of quota server</p>
+
+<h3 class="function"><a name="set_clerk_info-1">set_clerk_info/1</a></h3>
+<div class="spec">
+<p><tt>set_clerk_info(Info) -&gt; any()</tt></p>
+</div><p>save info into the worker about logger</p>
+
+<h3 class="function"><a name="set_parent_clerk_info-1">set_parent_clerk_info/1</a></h3>
+<div class="spec">
+<p><tt>set_parent_clerk_info(ClerkInfo) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="set_ttl-1">set_ttl/1</a></h3>
+<div class="spec">
+<p><tt>set_ttl(T) -&gt; any()</tt></p>
+</div><p>
+ ask a gtl process to stay alive for a longer (shorter) period of time</p>
+
+<h3 class="function"><a name="spawn-1">spawn/1</a></h3>
+<div class="spec">
+<p><tt>spawn(Fun) -&gt; any()</tt></p>
+</div><p>erlang:spawn replacer with GTL support</p>
+
+<h3 class="function"><a name="spawn_opt-2">spawn_opt/2</a></h3>
+<div class="spec">
+<p><tt>spawn_opt(Fun, Options) -&gt; any()</tt></p>
+</div><p>erlang:spawn_opt replacer with GTL support</p>
+
+<h3 class="function"><a name="status-0">status/0</a></h3>
+<div class="spec">
+<p><tt>status() -&gt; any()</tt></p>
+</div><p>status about current logger (if any)</p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><tt>terminate(Reason, S) -&gt; any()</tt></p>
+</div>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Jul 9 2012, 02:53:29.</i></p>
+</body>
+</html>

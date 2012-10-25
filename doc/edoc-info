@@ -1,0 +1,3 @@
+{application,gtl}.
+{packages,[]}.
+{modules,[gtl,gtl_app,gtl_saver,gtl_sup,gtl_util,quota_server]}.

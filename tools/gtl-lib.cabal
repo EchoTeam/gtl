@@ -1,0 +1,12 @@
+Name:                gtl-lib
+Version:             0.1
+Cabal-Version:       >= 1.2
+Synopsis:            Echo libraries
+Description:         Parsing library for gtl, some additional stuff
+Author:              Ivan Glushkov <ivan.glushkov@gmail.com>
+Maintainer:          Ivan Glushkov <ivan.glushkov@gmail.com>
+Build-Type:          Simple
+
+Executable gtl-analyzer
+    Build-Depends:   parsec3,containers,base,mtl,text,bytestring,attoparsec
+    Main-Is:         GTL/Main.hs

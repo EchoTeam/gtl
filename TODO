@@ -1,0 +1,5 @@
+- gtl:rpc/4
+- save to disk on one node - find more proper way?
+- use LICENCE
+- proper tests
+- eunit tests
