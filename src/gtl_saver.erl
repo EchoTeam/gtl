@@ -62,7 +62,7 @@ log_it(LogName, Header, Logs) ->
             io:format(IoDevice, "]~n~n", []),
             file:close(IoDevice);
         {error, Reason} ->
-            error_logger:error_msg("~p: can't open ~p: ~p", [?MODULE, LogName, Reason])
+            error_logger:error_msg("~p: can't open ~p: ~p", [?MODULE, FileName, Reason])
     end.
 
 print_logs(_, []) -> nop;
