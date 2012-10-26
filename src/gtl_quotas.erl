@@ -1,5 +1,5 @@
 %%% vim: set ts=4 sts=4 sw=4 expandtab:
--module(quota_server).
+-module(gtl_quotas).
 -behavior(gen_server).
 -export([
     alloc/2,        % alloc next chunk of quota

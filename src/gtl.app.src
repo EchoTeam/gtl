@@ -9,7 +9,7 @@
                  ]},
   {mod, { gtl_app, []}},
   {env, [
-        {gtl_memory, 50000000},
-        {gtl_processes, 300}
+        {memory, 50000000},
+        {processes, 300}
     ]}
  ]}.

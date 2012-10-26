@@ -17,7 +17,7 @@ but also see the whole picture:
   each phase has spent.
 - GTL wouldn't harm your cluster as it contains resourse management system.
   It wouldn't use more processes or memory then you allowed it to use 
-    (see quota_server.erl)
+    (see gtl_quotas.erl)
 - not saying a word about usual logging features
 
 

@@ -99,20 +99,12 @@
 -define(DEFAULT_MARK, "_").
 -define(MEMORY_CHUNK, 1000). % in bytes
 
-% @private
-% @doc Current limits of the system
-% TODO: move to app-config
-limits() ->
-    [
-        {gtl_memory, 50000000},
-        {gtl_processes, 300}
-    ].
 
 % @doc Get the current status of quota server
 quota_status() ->
     [ {K, Status} ||
-        {K,_N} <- limits(),
-        {ok, Status} <- [quota_server:status(K)]
+        K <- [ memory, processes ],
+        {ok, Status} <- [gtl_quotas:status(K)]
     ].
 
 % @private 
@@ -361,21 +353,21 @@ alloc_memory(Size) ->
         _ -> ?MEMORY_CHUNK
     end,
     %error_logger:info_msg("~p alloc_memory(~p)~n", [self(), Chunk]),
-    quota_server:alloc(gtl_memory, Chunk).
+    gtl_quotas:alloc(memory, Chunk).
 
 alloc_proc() ->
     %error_logger:info_msg("~p alloc_proc(~p)~n", [self(), 1]),
-    quota_server:alloc(gtl_processes, 1).
+    gtl_quotas:alloc(processes, 1).
 
 free_memory(0) -> ok;
 free_memory(Size) ->
     %error_logger:info_msg("~p free_memory(~p)~n", [self(), Size]),
-    quota_server:free(gtl_memory, Size).
+    gtl_quotas:free(memory, Size).
 
 free_proc(0) -> ok;
 free_proc(Size) ->
     %error_logger:info_msg("~p free_proc(~p)~n", [self(), Size]),
-    quota_server:free(gtl_processes, Size).
+    gtl_quotas:free(processes, Size).
 
 handle_record({record, R}, Size, MFree, S) when MFree < Size ->
     case alloc_memory(Size) of

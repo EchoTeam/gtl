@@ -27,9 +27,9 @@ init([]) ->
     {ok, { {one_for_one, 5, 10}, [
         {gtl_saver, {gtl_saver, start_link, []},
             permanent, 10000, worker, [gtl_saver]},
-        {quota_server.gtl_memory, {quota_server, start_link, [gtl_memory]},
-            permanent, 10000, worker, [quota_server]},
-        {quota_server.gtl_processes, {quota_server, start_link, [gtl_processes]},
-            permanent, 10000, worker, [quota_server]}
+        {gtl_quotas.memory, {gtl_quotas, start_link, [memory]},
+            permanent, 10000, worker, [gtl_quotas]},
+        {gtl_quotas.processes, {gtl_quotas, start_link, [processes]},
+            permanent, 10000, worker, [gtl_quotas]}
     ]}}.
 
