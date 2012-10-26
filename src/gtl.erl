@@ -622,9 +622,4 @@ flush_log(true, S) ->
 
     LogNames = lists:map(fun form_logname/1, Marks),
     %error_logger:info_msg("flush_log: ~p~n", [LogNames]),
-    save_to_disk(LogNames, ?VERSION, lists:reverse(Log)).
-
-
-save_to_disk(LogNames, Version, LogData) ->
-    %FIXME:
-    gtl_saver:save({LogNames, Version, LogData}).
+    gtl_saver:save(LogNames, ?VERSION, lists:reverse(Log)).

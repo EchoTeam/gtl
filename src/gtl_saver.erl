@@ -2,7 +2,7 @@
 -module(gtl_saver).
 -behavior(gen_server).
 -export([
-    save/1,
+    save/3,
     start_link/0,
 
     % gen server callbacks
@@ -16,30 +16,46 @@
 
 -define(PATH,"").
 
+-record(state, {max_queue_len = 50}).
+
 start_link() ->
-    %case application:get_env(gtl, gtl_node) of
-    %    Node when Node /= undefined andalso Node /= node() -> nop;
-    %    _ ->
-    gen_server:start_link({global, ?MODULE}, ?MODULE, [] , []).
+    case application:get_env(gtl, gtl_node) of
+        {ok, N} when N == node() ->
+            gen_server:start_link({local, ?MODULE}, ?MODULE, [] , []);
+        _ -> ignore
+    end.
 
-init([]) ->
-    {ok, undefined}.
+init([]) -> {ok, #state{} }.
 
-save(Log) -> gen_server:cast({global, ?MODULE}, {save, Log}).
+save(LogNames, Version, Log) ->
+    case application:get_env(gtl, gtl_node) of
+        {ok, Node} ->
+            gen_server:cast({?MODULE, Node}, {save, {LogNames, Version, Log}});
+        _ ->
+            error_logger:warning_msg("gtl_node env var is not set, log skipped~n"),
+            nop
+    end.
 
 handle_cast({save, {LogNames, Version, Logs}}, State) ->
-    %TODO: check the message queue size and possibly skip some messages
-    Header = "gtl version=" ++ Version,
-    lists:map(
-        fun(LogName) -> 
-                log_it(?PATH ++ LogName, Header, Logs) 
-        end, LogNames),
+    case erlang:process_info(self(), message_queue_len) of
+        {_, Len} when Len > State#state.max_queue_len -> nop;
+        _ ->
+            Header = "gtl version=" ++ Version,
+            lists:map(
+                fun(LogName) -> log_it(?PATH ++ LogName, Header, Logs) end,
+                LogNames)
+    end,
     {noreply, State}.
 
 log_it(LogName, Header, Logs) ->
-    case file:open(LogName, [append]) of
+    LogDir = case application:get_env(gtl, logdir) of
+        {ok, D} -> D;
+        _ -> "/var/log"
+    end,
+    FileName = LogDir ++ "/" ++ LogName,
+    case file:open(FileName, [append]) of
         {ok, IoDevice} ->
-            error_logger:info_msg("save log to ~p dir:~p~n", [LogName, element(2,file:get_cwd())]),
+            %error_logger:info_msg("save log to ~p dir:~p~n", [LogName, element(2,file:get_cwd())]),
             io:format(IoDevice, "[~s; ~14.3f] " ++ Header ++ "~n[~n",
                 [lists:flatten(gtl_util:time_to_string(erlang:universaltime(), "GMT")), float(gtl_util:now2micro(now()) / 1000000)]),
             print_logs(IoDevice, Logs),

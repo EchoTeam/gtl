@@ -5,7 +5,7 @@
     alloc/2,        % alloc next chunk of quota
     free/2,         % free the quota used
     set_limit/2,    % set new quota limit
-    
+
     name/1,
     start_link/1,
     stop/1,
@@ -40,8 +40,14 @@ name(Name) when is_atom(Name) ->
 
 start_link(Name) when is_atom(Name) ->
     Key = list_to_atom("quota_" ++ atom_to_list(Name)),
-    Limit = application:get_env(gtl, Key),
+    Limit = case application:get_env(gtl, Key) of
+        {ok, L} -> L;
+        _ ->
+            error_logger:warning_msg("env key ~p is not set. Use 0", [Key]),
+            0
+    end,
     start_link(Name, Limit).
+
 start_link(Name, Limit) ->
     gen_server:start_link({local, name(Name)}, ?MODULE, Limit, []).
 
