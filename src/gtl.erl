@@ -301,7 +301,7 @@ start_new_clerk({ok, _V}) ->
             undefined
     end;
 start_new_clerk(Error) ->
-    error_logger:warning_msg("can't start new clerk: alloc_proc() returned ~p~n", [Error]),
+    %error_logger:warning_msg("can't start new clerk: alloc_proc() returned ~p~n", [Error]),
     case get_parent_clerk_pid() of
         Pid when is_pid(Pid) -> gen_server:cast(Pid, {record, ?MSG(undefined, now(), {gtl, alloc_proc, faled})});
         _ -> nop
